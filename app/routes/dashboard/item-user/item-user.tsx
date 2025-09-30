@@ -10,7 +10,7 @@ import { getAllItemUser } from "~/redux/features/Item-User/itemUserSlice";
 import { ItemUserCreate } from "./item-user-create";
 
 const ItemUser = () => {
-  const token = useToken();
+  const token = useToken() as string;
   const dispatch = useAppDispatch();
   const [isAttempted, setIsAttempted] = useState<boolean>(true);
   const { loading, data, refresh } = useAppSelector((state) => state.itemUsers);
@@ -47,7 +47,7 @@ const ItemUser = () => {
       <DataTable
         columns={columns}
         data={data?.result || []}
-        filterWith="name"
+        filterWith="itemUserId"
       />
     </div>
   );

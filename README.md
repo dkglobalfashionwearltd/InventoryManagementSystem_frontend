@@ -1,6 +1,9 @@
 <<<<<<< HEAD
+
 # InventoryManagementSystem_frontend
+
 =======
+
 # Welcome to React Router!
 
 A modern, production-ready template for building full-stack React applications using React Router.
@@ -88,4 +91,7 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 ---
 
 Built with ❤️ using React Router.
->>>>>>> 82d48c1 (add full project)
+
+> > > > > > > 82d48c1 (add full project)
+
+#

@@ -107,10 +107,10 @@ export const columns: ColumnDef<Item>[] = [
     ),
   },
   {
-    accessorKey: "warrantyDate",
-    header: "Warranty Date",
+    accessorKey: "warrantyEnd",
+    header: "Warranty End",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("warrantyDate")}</div>
+      <div className="capitalize">{row.getValue("warrantyEnd")}</div>
     ),
   },
   {
