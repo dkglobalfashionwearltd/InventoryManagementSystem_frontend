@@ -15,7 +15,7 @@ export function SiteHeader() {
         />
         <ThemeToggler />
         <div className="w-full grid justify-end">
-          <NavUser user={User} />
+          <NavUser />
         </div>
       </div>
     </header>

@@ -104,7 +104,7 @@ export function NavUser() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => navigate("/dashboard/user")}>
+              <DropdownMenuItem onClick={() => navigate("/dashboard/users")}>
                 <UserCircleIcon />
                 Account
               </DropdownMenuItem>
