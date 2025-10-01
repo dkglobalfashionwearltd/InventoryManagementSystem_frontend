@@ -1,16 +1,8 @@
-import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useRole, useToken, useUserId } from "~/components/getToken";
 import { getUser } from "~/redux/features/auth/userSlice";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
-
-interface User {
-  id: string;
-  userName: string;
-  email: string;
-  phoneNumber: string;
-}
 
 const User = () => {
   const dispatch = useAppDispatch();

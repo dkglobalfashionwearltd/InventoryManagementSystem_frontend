@@ -11,7 +11,7 @@ import { getAllDepartment } from "~/redux/features/Department/departmentSlice";
 import { columns } from "~/components/columns/department-columns";
 
 const Department = () => {
-  const token = useToken();
+  const token = useToken() as string;
   const dispatch = useAppDispatch();
   const [isAttempted, setIsAttempted] = useState<boolean>(true);
   const { loading, data, error, refresh } = useAppSelector(

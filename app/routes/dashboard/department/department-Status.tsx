@@ -48,7 +48,7 @@ type DepartmentProps = {
 export function DepartmentStatus({ department }: DepartmentUpdateProps) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const token = useToken();
+  const token = useToken() as string;
 
   const dispatch = useAppDispatch();
   const handleUpdate = async (formData: FormData, isClick: boolean) => {
