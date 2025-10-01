@@ -10,7 +10,7 @@ const User = () => {
   const userId = useUserId() as string;
   const userRole = useRole();
   const navigate = useNavigate();
-  const { loading, data } = useAppSelector((state) => state?.user);
+  const { loading, data } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getUser({ userId, token }));
