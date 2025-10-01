@@ -132,6 +132,7 @@ export function ItemUserUpdate({ itemUser }: ItemUserUpdateProps) {
 
 function ItemUserUpdateForm({ className, itemUser, onSubmit }: ItemUserProps) {
   const [formData, setFormData] = React.useState({
+    itemUserId: itemUser.itemUserId,
     officeId: itemUser.officeId,
     name: itemUser.name,
     phoneNumber: itemUser.phoneNumber,
