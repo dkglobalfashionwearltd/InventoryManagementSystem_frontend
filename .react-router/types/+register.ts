@@ -13,6 +13,7 @@ type Params = {
   "/dashboard/items": {};
   "/dashboard/items/create": {};
   "/dashboard/items/update": {};
+  "/dashboard/user": {};
   "/dashboard/categories": {};
   "/dashboard/departments": {};
   "/dashboard/item-users": {};

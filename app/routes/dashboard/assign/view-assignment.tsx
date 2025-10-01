@@ -74,11 +74,11 @@ export default function UserItemViewer() {
   // Filter users by search term
   const filteredUsers = data?.result?.filter(
     (user) =>
-      user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user?.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
       user?.officeId
         ?.toString()
         .toLowerCase()
-        .includes(searchTerm.toLowerCase())
+        .includes(searchTerm?.toLowerCase())
   );
 
   return (
@@ -99,7 +99,7 @@ export default function UserItemViewer() {
       />
 
       <Accordion type="single" collapsible className="w-full">
-        {filteredUsers.length > 0 ? (
+        {filteredUsers?.length > 0 ? (
           filteredUsers.map((user) => (
             <AccordionItem
               key={user?.itemUserId}
@@ -134,13 +134,13 @@ export default function UserItemViewer() {
                         </TableHeader>
                         <TableBody>
                           {user?.items?.map((item) => (
-                            <TableRow key={item.itemId}>
-                              <TableCell>{item.itemId}</TableCell>
-                              <TableCell>{item.name}</TableCell>
-                              <TableCell>{item.categoryName}</TableCell>
-                              <TableCell>{item.assignedDate}</TableCell>
-                              <TableCell>{item.assignTimeCondition}</TableCell>
-                              <TableCell>{item.assignAgainstTo}</TableCell>
+                            <TableRow key={item?.itemId}>
+                              <TableCell>{item?.itemId}</TableCell>
+                              <TableCell>{item?.name}</TableCell>
+                              <TableCell>{item?.categoryName}</TableCell>
+                              <TableCell>{item?.assignedDate}</TableCell>
+                              <TableCell>{item?.assignTimeCondition}</TableCell>
+                              <TableCell>{item?.assignAgainstTo}</TableCell>
                               <TableCell className="capitalize">
                                 {item?.status}
                               </TableCell>

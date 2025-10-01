@@ -57,12 +57,12 @@ export function DepartmentCreate() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="flex items-center gap-2">
-            <Plus /> Add Category
+            <Plus /> Add Department
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[525px] text-black dark:text-white">
           <DialogHeader>
-            <DialogTitle>Add Category</DialogTitle>
+            <DialogTitle>Add Department</DialogTitle>
             <DialogDescription>
               Give info here. Click save when you're done.
             </DialogDescription>
@@ -87,12 +87,12 @@ export function DepartmentCreate() {
       <DrawerTrigger asChild>
         <Button variant="outline" className="flex items-center gap-2">
           <Plus />
-          Add Category
+          Add Department
         </Button>
       </DrawerTrigger>
       <DrawerContent className="max-h-[90vh] text-black dark:text-white">
         <DrawerHeader className="text-left">
-          <DrawerTitle>Add Category</DrawerTitle>
+          <DrawerTitle>Add Department</DrawerTitle>
           <DrawerDescription>
             Give Info here. Click save when you're done.
           </DrawerDescription>
@@ -136,11 +136,11 @@ function DepartmentCreateForm({ className, onSubmit }: CateogryProps) {
       onSubmit={handleSubmit}
     >
       <div className="grid gap-2">
-        <Label htmlFor="name">Category Name</Label>
+        <Label htmlFor="name">Department Name</Label>
         <Input
           type="text"
           id="name"
-          placeholder="laptop"
+          placeholder="IT"
           name="name"
           onChange={handleChange}
           required

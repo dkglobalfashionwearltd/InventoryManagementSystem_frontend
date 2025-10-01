@@ -28,20 +28,14 @@ import { clearToken } from "~/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
 import { useToken, useUserId } from "./getToken";
 import LoadingSpinner from "./loading";
+import { useNavigate } from "react-router";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
   const dispatch = useAppDispatch();
   const token = useToken() as string;
   const userId = useUserId() as string;
+  const navigate = useNavigate();
   const { loading, data } = useAppSelector((state) => state.user);
 
   useEffect(() => {
@@ -110,7 +104,7 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/dashboard/user")}>
                 <UserCircleIcon />
                 Account
               </DropdownMenuItem>
