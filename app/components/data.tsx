@@ -20,6 +20,11 @@ export const NavMenu = [
     icon: LayoutDashboardIcon,
   },
   {
+    title: "Stocks",
+    url: "/dashboard/stocks",
+    icon: Menu,
+  },
+  {
     title: "Items",
     url: "/dashboard/items",
     icon: Menu,
