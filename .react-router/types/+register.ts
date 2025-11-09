@@ -14,6 +14,8 @@ type Params = {
   "/dashboard/items/create": {};
   "/dashboard/items/update": {};
   "/dashboard/users": {};
+  "/dashboard/stocks": {};
+  "/dashboard/stocks/create": {};
   "/dashboard/categories": {};
   "/dashboard/departments": {};
   "/dashboard/item-users": {};

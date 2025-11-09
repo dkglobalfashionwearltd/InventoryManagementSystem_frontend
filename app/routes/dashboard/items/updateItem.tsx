@@ -16,7 +16,6 @@ type Item = {
   itemId: number;
   name: string;
   modelNumber: string;
-  serialNumber: string;
   brandName: string;
   price: number;
   purchaseDate: string;
@@ -26,15 +25,12 @@ type Item = {
   nextServicingDate: string;
   serviceProviderName: string;
   serviceProviderPhoneNumber: string;
-  itemCondition: string;
-  quantity: string;
   warrantyEnd: string;
   category: {
     categoryId: number;
     name: string;
     status: string;
   };
-  status: string;
 };
 
 type ItemProps = {
@@ -50,7 +46,6 @@ const UpdateItem = ({ className }: ItemProps) => {
     itemId: item?.itemId.toString() ?? "",
     name: item?.name ?? "",
     modelNumber: item?.modelNumber ?? "",
-    serialNumber: item?.serialNumber ?? "",
     brandName: item?.brandName ?? "",
     price: item?.price.toString() ?? "",
     purchaseDate: item?.purchaseDate ?? "",
@@ -61,10 +56,7 @@ const UpdateItem = ({ className }: ItemProps) => {
     nextServicingDate: item?.nextServicingDate ?? "",
     serviceProviderName: item?.serviceProviderName ?? "",
     serviceProviderPhoneNumber: item?.serviceProviderPhoneNumber ?? "",
-    quantity: item?.quantity.toString() ?? "",
-    itemCondition: item?.itemCondition ?? "",
     categoryId: item?.category?.categoryId.toString() ?? "",
-    status: item?.status ?? "",
   });
   const [selectedCategory, setSelectedCategory] =
     React.useState<ComboboxOption | null>(null);
@@ -129,12 +121,7 @@ const UpdateItem = ({ className }: ItemProps) => {
               placeholder: "DS-K1T5",
               value: formData?.modelNumber,
             },
-            {
-              label: "Serial Number",
-              name: "serialNumber",
-              placeholder: "FV12S3490",
-              value: formData?.serialNumber,
-            },
+
             {
               label: "Brand Name",
               name: "brandName",
@@ -190,19 +177,6 @@ const UpdateItem = ({ className }: ItemProps) => {
               label: "Service Provider Phone Number",
               name: "serviceProviderPhoneNumber",
               value: formData?.serviceProviderPhoneNumber,
-            },
-            { label: "Quantity", name: "quantity", value: formData?.quantity },
-            {
-              label: "Item Condition",
-              name: "itemCondition",
-              placeholder: "good, broken",
-              value: formData?.itemCondition,
-            },
-            {
-              label: "Status",
-              name: "status",
-              placeholder: "active/inactive",
-              value: formData?.status,
             },
           ].map((field) => (
             <div className="grid gap-2" key={field.name}>

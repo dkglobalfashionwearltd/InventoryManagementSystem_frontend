@@ -8,7 +8,6 @@ type Item = {
   itemId: number;
   name: string;
   modelNumber: string;
-  serialNumber: string;
   brandName: string;
   price: number;
   purchaseDate: string;
@@ -18,8 +17,6 @@ type Item = {
   nextServicingDate: string;
   serviceProviderName: string;
   serviceProviderPhoneNumber: string;
-  itemCondition: string;
-  quantity: string;
   warrantyEnd: string;
   category: {
     categoryId: number;
@@ -69,13 +66,6 @@ export const columns: ColumnDef<Item>[] = [
     header: "Model Number",
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("modelNumber")}</div>
-    ),
-  },
-  {
-    accessorKey: "serialNumber",
-    header: "Serial Number",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("serialNumber")}</div>
     ),
   },
 
@@ -149,13 +139,6 @@ export const columns: ColumnDef<Item>[] = [
     header: "Next Servicing Date",
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("nextServicingDate")}</div>
-    ),
-  },
-  {
-    accessorKey: "itemCondition",
-    header: "Condition",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("itemCondition")}</div>
     ),
   },
   {

@@ -1,10 +1,4 @@
-import {
-  BellIcon,
-  CreditCardIcon,
-  LogOutIcon,
-  MoreVerticalIcon,
-  UserCircleIcon,
-} from "lucide-react";
+import { BellIcon, LogOutIcon, UserCircleIcon } from "lucide-react";
 import { useEffect } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
@@ -39,6 +33,7 @@ export function NavUser() {
   const { loading, data } = useAppSelector((state) => state.user);
 
   useEffect(() => {
+    if (!userId || !token) return;
     dispatch(getUser({ userId, token }));
   }, [userId]);
 

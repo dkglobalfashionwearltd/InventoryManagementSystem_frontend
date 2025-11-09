@@ -3,7 +3,6 @@ import {
   createSlice,
   type PayloadAction,
 } from "@reduxjs/toolkit";
-import { use } from "react";
 import { baseUrl } from "~/components/data";
 import { apiRequest } from "~/redux/data/GetData";
 
@@ -59,7 +58,6 @@ export const getUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log(userId);
       const res = await apiRequest(
         "get",
         `${baseUrl}/api/auth/user/get`,

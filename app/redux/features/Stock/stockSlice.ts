@@ -6,32 +6,25 @@ import {
 import { baseUrl } from "~/components/data";
 import { apiRequest } from "~/redux/data/GetData";
 
-export type Item = {
+export type Stock = {
+  stockId: number;
   itemId: number;
-  name: string;
-  modelNumber: string;
-  brandName: string;
-  price: number;
+  itemName: string;
+  itemModel: string;
+  totalGivenQuantity: string;
+  lastQuantity: string;
+  currentQuantity: string;
   purchaseDate: string;
-  sourceName: string;
-  sourcePhoneNumber: string;
-  lastServicingDate: string;
-  nextServicingDate: string;
-  serviceProviderName: string;
-  serviceProviderPhoneNumber: string;
-  warrantyEnd: string;
-  category: {
-    categoryId: number;
-    name: string;
-    status: string;
-  };
-  status: string;
+  stockedAt: string;
+  lastStockedAt: string;
+  stockOutAt: string;
+  stockCount: string;
 };
 export interface Data {
   statusCode: number;
   success: boolean;
   message: string;
-  result: Item[];
+  result: Stock[];
 }
 interface StateType {
   loading: boolean;
@@ -48,13 +41,13 @@ const initialState: StateType = {
   statusChange: false,
 };
 
-export const getAllItem = createAsyncThunk(
-  "item/getAllItem",
+export const getAllStock = createAsyncThunk(
+  "stocks/getAllStock",
   async ({ token }: { token: string | null }, { rejectWithValue }) => {
     try {
       const res = await apiRequest(
         "get",
-        `${baseUrl}/api/item/getall`,
+        `${baseUrl}/api/stocks/getall`,
         token,
         "application/json",
         {},
@@ -64,14 +57,14 @@ export const getAllItem = createAsyncThunk(
     } catch (error: any) {
       console.log(error);
       return rejectWithValue(
-        error?.response?.data?.message || "Failed to get item data"
+        error?.response?.data?.message || "Failed to get stock data"
       );
     }
   }
 );
 
-export const createItem = createAsyncThunk(
-  "item/createItem",
+export const manageStock = createAsyncThunk(
+  "stocks/manageStock",
   async (
     { token, formPayload }: { token: string | null; formPayload: FormData },
     { rejectWithValue }
@@ -79,7 +72,7 @@ export const createItem = createAsyncThunk(
     try {
       const res = await apiRequest(
         "post",
-        `${baseUrl}/api/item/create`,
+        `${baseUrl}/api/stocks/manage`,
         token,
         "application/json",
         {},
@@ -89,14 +82,14 @@ export const createItem = createAsyncThunk(
     } catch (error: any) {
       console.log(error);
       return rejectWithValue(
-        error?.response?.data?.message || "Failed to create item"
+        error?.response?.data?.message || "Failed to create stock"
       );
     }
   }
 );
 
-export const updateItem = createAsyncThunk(
-  "item/updateItem",
+export const updateStock = createAsyncThunk(
+  "stocks/updateStock",
   async (
     { token, formPayload }: { token: string | null; formPayload: FormData },
     { rejectWithValue }
@@ -104,7 +97,7 @@ export const updateItem = createAsyncThunk(
     try {
       const res = await apiRequest(
         "post",
-        `${baseUrl}/api/item/update`,
+        `${baseUrl}/api/stocks/manage`,
         token,
         "application/json",
         {},
@@ -114,54 +107,40 @@ export const updateItem = createAsyncThunk(
     } catch (error: any) {
       console.log(error);
       return rejectWithValue(
-        error?.response?.data?.message || "Failed to update item"
+        error?.response?.data?.message || "Failed to update stock"
       );
     }
   }
 );
 
-const itemSlice = createSlice({
-  name: "item-",
+const stockSlice = createSlice({
+  name: "stocks",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getAllItem.pending, (state) => {
+      .addCase(getAllStock.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getAllItem.fulfilled, (state, action: PayloadAction<Data>) => {
+      .addCase(getAllStock.fulfilled, (state, action: PayloadAction<Data>) => {
         state.loading = false;
         state.data = action.payload;
       })
-      .addCase(getAllItem.rejected, (state, action) => {
+      .addCase(getAllStock.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(createItem.pending, (state) => {
+      .addCase(manageStock.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createItem.fulfilled, (state, action: PayloadAction<Data>) => {
+      .addCase(manageStock.fulfilled, (state, action: PayloadAction<Data>) => {
         state.loading = false;
         state.data = action.payload;
         state.refresh = !state.refresh;
       })
-      .addCase(createItem.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-        state.refresh = !state.refresh;
-      })
-      .addCase(updateItem.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateItem.fulfilled, (state, action: PayloadAction<Data>) => {
-        state.loading = false;
-        state.data = action.payload;
-        state.refresh = !state.refresh;
-      })
-      .addCase(updateItem.rejected, (state, action) => {
+      .addCase(manageStock.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
         state.refresh = !state.refresh;
@@ -169,4 +148,4 @@ const itemSlice = createSlice({
   },
 });
 
-export default itemSlice.reducer;
+export default stockSlice.reducer;

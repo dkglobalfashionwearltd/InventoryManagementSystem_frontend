@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { columns } from "~/components/columns/stock-columns";
 import { DataTable } from "~/components/custom-data-table/data-table";
-import { useAppDispatch, useAppSelector } from "~/redux/hook";
 import { DataTableSkeleton } from "~/components/datatableskeleton";
-import { Separator } from "~/components/ui/separator";
 import { useToken } from "~/components/getToken";
-import { toast } from "sonner";
-import { columns } from "~/components/columns/item-columns";
-import { getAllItem } from "~/redux/features/Item/itemSlice";
-import { Button } from "~/components/ui/button";
-import { Plus, PlusCircle } from "lucide-react";
-import { Link, Outlet } from "react-router";
 
-const Item = () => {
+import { Separator } from "~/components/ui/separator";
+import { getAllStock } from "~/redux/features/Stock/stockSlice";
+import { useAppDispatch, useAppSelector } from "~/redux/hook";
+import { StockCreate } from "./stock-create";
+import { toast } from "sonner";
+
+const Stock = () => {
   const token = useToken() as string;
   const dispatch = useAppDispatch();
   const [isAttempted, setIsAttempted] = useState<boolean>(true);
-  const { loading, data, refresh } = useAppSelector((state) => state.items);
+  const { loading, data, refresh } = useAppSelector((state) => state.stocks);
+  console.log("stock", data);
 
   useEffect(() => {
     fetchProducts();
@@ -34,29 +34,25 @@ const Item = () => {
   }, [refresh]);
 
   const fetchProducts = async () => {
-    await dispatch(getAllItem({ token }));
+    await dispatch(getAllStock({ token }));
   };
-  console.log(data?.result);
+  //   console.log(data?.result);
   return loading ? (
     <DataTableSkeleton />
   ) : (
     <div className="w-full text-black dark:text-white">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl ">Item List</h1>
-        <Link to={"/dashboard/items/create"}>
-          <Button variant={"outline"}>
-            <PlusCircle /> Add Item
-          </Button>
-        </Link>
+        <h1 className="text-2xl ">Stock List</h1>
+        <StockCreate />
       </div>
       <Separator className="mt-4" />
       <DataTable
         columns={columns}
         data={data?.result || []}
-        filterWith="modelNumber"
+        filterWith="itemModel"
       />
     </div>
   );
 };
 
-export default Item;
+export default Stock;

@@ -11,7 +11,7 @@ type Item = {
   name: string;
   categoryName: string;
   assignedDate: string;
-  assignTimeCondition: string;
+  remarks: string;
   assignAgainstTo: number;
   status: string;
 };

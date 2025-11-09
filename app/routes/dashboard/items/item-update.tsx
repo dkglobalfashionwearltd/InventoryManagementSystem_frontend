@@ -37,7 +37,6 @@ type Item = {
   itemId: number;
   name: string;
   modelNumber: string;
-  serialNumber: string;
   brandName: string;
   price: number;
   purchaseDate: string;
@@ -140,7 +139,6 @@ function ItemUpdateForm({ className, item, onSubmit }: ItemProps) {
   const [formData, setFormData] = React.useState({
     name: item.name,
     modelNumber: item.modelNumber,
-    serialNumber: item.serialNumber,
     brandName: item.brandName,
     price: item.price,
     purchaseDate: item.purchaseDate,
@@ -208,16 +206,6 @@ function ItemUpdateForm({ className, item, onSubmit }: ItemProps) {
         />
       </div>
 
-      <div className="grid gap-2 p-2">
-        <Label htmlFor="serialNumber">Serial Number</Label>
-        <Input
-          id="serialNumber"
-          name="serialNumber"
-          value={formData.serialNumber}
-          onChange={handleChange}
-          required
-        />
-      </div>
       <div className="grid gap-2 p-2">
         <Label htmlFor="brandName">Brand Name</Label>
         <Input

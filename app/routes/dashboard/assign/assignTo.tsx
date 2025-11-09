@@ -13,6 +13,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Textarea } from "~/components/ui/textarea";
 import { createAssignment } from "~/redux/features/assign/assignSlice";
 import { getAllItemUser } from "~/redux/features/Item-User/itemUserSlice";
 import { getAllItem } from "~/redux/features/Item/itemSlice";
@@ -27,7 +28,7 @@ const AssignTo = () => {
     data: assignData,
     refresh,
   } = useAppSelector((state) => state.assign);
-  const token = useToken();
+  const token = useToken() as string;
 
   const [selected, setSelected] = React.useState<ComboboxOption | null>(null);
   const [selectedUser, setSelectedUser] = React.useState<ComboboxOption[]>([]);
@@ -39,14 +40,14 @@ const AssignTo = () => {
     itemUserIds: string[];
     itemIds: string[];
     assignedDate: string;
-    assignTimeCondition: string;
+    remarks: string;
     assignAgainstTo: string;
     status: string;
   }>({
     itemUserIds: [],
     itemIds: [],
     assignedDate: "",
-    assignTimeCondition: "",
+    remarks: "",
     assignAgainstTo: "",
     status: "",
   });
@@ -68,6 +69,9 @@ const AssignTo = () => {
   }, [refresh]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -196,12 +200,12 @@ const AssignTo = () => {
             />
           </div>
           <div className="grid gap-2 p-0">
-            <Label htmlFor="assignTimeCondition">Item Condition</Label>
-            <Input
-              id="assignTimeCondition"
-              name="assignTimeCondition"
-              placeholder="new, used"
-              onChange={handleChange}
+            <Label htmlFor="remarks">Remarks</Label>
+            <Textarea
+              id="remarks"
+              name="remarks"
+              placeholder="add remarks 'serial-number/item condition etc.'"
+              onChange={handleTextAreaChange}
               required
             />
           </div>
@@ -214,7 +218,7 @@ const AssignTo = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="grid gap-2 p-0">
+          {/* <div className="grid gap-2 p-0">
             <Label htmlFor="status">Status</Label>
             <Input
               id="status"
@@ -223,7 +227,7 @@ const AssignTo = () => {
               onChange={handleChange}
               required
             />
-          </div>
+          </div> */}
         </div>
 
         <div className="flex justify-center mt-5">

@@ -127,7 +127,7 @@ export default function UserItemViewer() {
                             <TableHead>Name</TableHead>
                             <TableHead>Category</TableHead>
                             <TableHead>Assigned Date</TableHead>
-                            <TableHead>Time Condition</TableHead>
+                            <TableHead>Remarks</TableHead>
                             <TableHead>Against To</TableHead>
                             <TableHead>Status</TableHead>
                           </TableRow>
@@ -139,7 +139,7 @@ export default function UserItemViewer() {
                               <TableCell>{item?.name}</TableCell>
                               <TableCell>{item?.categoryName}</TableCell>
                               <TableCell>{item?.assignedDate}</TableCell>
-                              <TableCell>{item?.assignTimeCondition}</TableCell>
+                              <TableCell>{item?.remarks}</TableCell>
                               <TableCell>{item?.assignAgainstTo}</TableCell>
                               <TableCell className="capitalize">
                                 {item?.status}

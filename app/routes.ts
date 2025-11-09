@@ -18,6 +18,8 @@ export default [
         route("update", "routes/dashboard/items/updateItem.tsx"),
       ]),
       route("users", "routes/dashboard/application-user/user.tsx"),
+      route("stocks", "routes/dashboard/stocks/stock.tsx"),
+      route("stocks/create", "routes/dashboard/stocks/stock-create.tsx"),
       route("categories", "routes/dashboard/category.tsx"),
       route("departments", "routes/dashboard/department/department.tsx"),
       route("item-users", "routes/dashboard/item-user/item-user.tsx"),

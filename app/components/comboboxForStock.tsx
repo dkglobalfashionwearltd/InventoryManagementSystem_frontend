@@ -10,22 +10,6 @@ import React, { useEffect, useId, useRef, useState } from "react";
 export type ComboboxOption = {
   itemId: number;
   name: string;
-  modelNumber: string;
-  brandName: string;
-  price: number;
-  purchaseDate: string;
-  sourceName: string;
-  sourcePhoneNumber: string;
-  lastServicingDate: string;
-  nextServicingDate: string;
-  serviceProviderName: string;
-  serviceProviderPhoneNumber: string;
-  category: {
-    categoryId: number;
-    name: string;
-    status: string;
-  };
-  status: string;
   [k: string]: any;
 };
 
@@ -43,7 +27,7 @@ type ComboboxProps = {
   ) => React.ReactNode;
 };
 
-export default function ComboboxItem({
+export default function ComboboxForStock({
   options,
   value = null,
   onChange,
@@ -88,10 +72,9 @@ export default function ComboboxItem({
     const filtered = options
       .filter((o) => {
         const name = o.name ?? "";
-        const modelNumber = o.modelNumber ?? "";
+        const status = o.status ?? "";
         return (
-          name.toLowerCase().includes(q) ||
-          modelNumber.toLowerCase().includes(q)
+          name.toLowerCase().includes(q) || status.toLowerCase().includes(q)
         );
       })
       .slice(0, maxResults);
@@ -184,7 +167,7 @@ export default function ComboboxItem({
           aria-expanded={open}
           aria-activedescendant={
             highlightedIndex >= 0 && filtered[highlightedIndex]
-              ? `cb-item-${id}-${filtered[highlightedIndex].categoryId}`
+              ? `cb-item-${id}-${filtered[highlightedIndex].itemId}`
               : undefined
           }
           className={
@@ -245,10 +228,10 @@ export default function ComboboxItem({
                 const isHighlighted = idx === highlightedIndex;
                 return (
                   <li
-                    key={opt.categoryId}
-                    id={`cb-item-${id}-${opt.categoryId}`}
+                    key={opt.itemId}
+                    id={`cb-item-${id}-${opt.itemId}`}
                     role="option"
-                    aria-selected={value?.categoryId === opt.categoryId}
+                    aria-selected={value?.itemId === opt.itemId}
                     onMouseEnter={() => setHighlightedIndex(idx)}
                     onMouseDown={(e) => e.preventDefault()} // prevent blur before click
                     onClick={() => selectOption(opt)}
@@ -271,7 +254,7 @@ export default function ComboboxItem({
                       )}
                     </div>
 
-                    {value?.categoryId === opt.categoryId && (
+                    {value?.itemId === opt.itemId && (
                       <svg
                         className="h-4 w-4"
                         viewBox="0 0 20 20"

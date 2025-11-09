@@ -6,6 +6,7 @@ import itemReducer from "./features/Item/itemSlice";
 import loginReducer from "./features/auth/authSlice";
 import userReducer from "./features/auth/userSlice";
 import assignReducer from "./features/assign/assignSlice";
+import stockReducer from "./features/Stock/stockSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     login: loginReducer,
     user: userReducer,
     assign: assignReducer,
+    stocks: stockReducer,
   },
 });
 
