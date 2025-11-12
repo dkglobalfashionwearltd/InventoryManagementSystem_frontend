@@ -15,6 +15,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { Toaster } from "./components/ui/sonner";
 import { ApiHealthChecker } from "./components/apihealthchecker";
+import TokenRefresher from "./components/token-refresh";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -74,6 +75,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <Provider store={store}>
+        <TokenRefresher />
         <ApiHealthChecker />
         <Outlet />
         <Toaster />

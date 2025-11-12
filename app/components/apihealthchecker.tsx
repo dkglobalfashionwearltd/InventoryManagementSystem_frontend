@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { baseUrl } from "./data";
+import { useAppDispatch } from "~/redux/hook";
+import { clearToken } from "~/redux/features/auth/authSlice";
 
 const API_URL = `${baseUrl}/health`;
 
 export function ApiHealthChecker() {
   const [isApiUp, setIsApiUp] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -31,6 +34,8 @@ export function ApiHealthChecker() {
             position: "top-right",
             richColors: true,
           });
+          // dispatch(clearToken());
+          // window.location.reload();
           setIsApiUp(false);
         }
       }

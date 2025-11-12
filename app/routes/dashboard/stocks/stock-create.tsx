@@ -34,15 +34,7 @@ import { useToken, useUserId } from "~/components/getToken";
 import ComboboxForStock, {
   type ComboboxOption,
 } from "~/components/comboboxForStock";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
+
 import { manageStock } from "~/redux/features/Stock/stockSlice";
 
 type Stock = {
@@ -64,7 +56,7 @@ export function StockCreate() {
   const token = useToken() as string;
 
   const dispatch = useAppDispatch();
-  const handleUpdate = async (formData: FormData, isClick: boolean) => {
+  const handleUpdate = (formData: FormData, isClick: boolean) => {
     dispatch(
       manageStock({
         token,

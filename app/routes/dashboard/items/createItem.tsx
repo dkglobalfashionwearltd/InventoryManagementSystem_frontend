@@ -7,7 +7,7 @@ import ComboboxItem, { type ComboboxOption } from "~/components/comboboxItem";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
 import { createItem } from "~/redux/features/Item/itemSlice";
 import { getAllCategory } from "~/redux/features/Category/categorySlice";
-import { useToken } from "~/components/getToken";
+import { useToken, useUserId } from "~/components/getToken";
 import { useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import LoadingSpinner from "~/components/loading";
@@ -17,6 +17,7 @@ type ItemProps = {
 };
 
 const CreatItem = ({ className }: ItemProps) => {
+  const userId = useUserId();
   const [formData, setFormData] = React.useState({
     name: "",
     modelNumber: "",
@@ -30,9 +31,17 @@ const CreatItem = ({ className }: ItemProps) => {
     nextServicingDate: "",
     serviceProviderName: "",
     serviceProviderPhoneNumber: "",
+    quantity: "",
+    userId: "",
     categoryId: "",
     status: "",
   });
+  React.useEffect(() => {
+    if (userId) {
+      setFormData((prev) => ({ ...prev, userId }));
+    }
+  }, [userId]);
+
   const [selectedCategory, setSelectedCategory] =
     React.useState<ComboboxOption | null>(null);
 
@@ -110,6 +119,10 @@ const CreatItem = ({ className }: ItemProps) => {
             {
               label: "Service Provider Phone Number",
               name: "serviceProviderPhoneNumber",
+            },
+            {
+              label: "Quantity",
+              name: "quantity",
             },
           ].map((field) => (
             <div className="flex flex-col gap-1 min-w-0" key={field.name}>

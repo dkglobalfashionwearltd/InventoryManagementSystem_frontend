@@ -6,54 +6,67 @@ interface DecodedToken {
   [key: string]: any;
 }
 
+// export const useToken = () => {
+//   const [token, setToken] = useState<string | null | undefined>(undefined);
+
+//   useEffect(() => {
+//     // const storeToken = localStorage.getItem("token");
+//     const storeToken = document.cookie("session_token");
+//     setToken(storeToken);
+//   }, []);
+//   return token;
+// };
+
 export const useToken = () => {
-  const [token, setToken] = useState<string | null | undefined>(undefined);
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
+    const getCookie = (name: string) => {
+      const match = document.cookie.match(
+        new RegExp("(^| )" + name + "=([^;]+)")
+      );
+      return match ? decodeURIComponent(match[2]) : null;
+    };
 
-    if (!storedToken) {
-      setToken(null);
-      return;
-    }
-
-    try {
-      const decoded: DecodedToken = jwtDecode(storedToken);
-      if (decoded.exp && decoded.exp * 1000 > Date.now()) {
-        setToken(storedToken);
-      } else {
-        // expired
-        localStorage.removeItem("token");
-        setToken(null);
-      }
-    } catch {
-      // malformed token
-      localStorage.removeItem("token");
-      setToken(null);
-    }
+    const storedToken = getCookie("session_token");
+    setToken(storedToken);
   }, []);
 
   return token;
 };
 
 export const useUserId = () => {
-  const [userId, setUserId] = useState<string | null | undefined>(undefined);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    const storeUserId = localStorage.getItem("userId");
-    setUserId(storeUserId);
+    const getCookie = (name: string) => {
+      const match = document.cookie.match(
+        new RegExp("(^| )" + name + "=([^;]+)")
+      );
+      return match ? decodeURIComponent(match[2]) : null;
+    };
+
+    const storedUserId = getCookie("user_id");
+    setUserId(storedUserId);
   }, []);
+
   return userId;
 };
 
-export const useRole = () => {
-  const [userRole, setUserRole] = useState<string | null | undefined>(
-    undefined
-  );
+export const useUserRole = () => {
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
-    const storeUserRole = localStorage.getItem("userRole");
-    setUserRole(storeUserRole);
+    const getCookie = (name: string) => {
+      const match = document.cookie.match(
+        new RegExp("(^| )" + name + "=([^;]+)")
+      );
+      return match ? decodeURIComponent(match[2]) : null;
+    };
+
+    const storedUserRole = getCookie("user_role");
+    setUserRole(storedUserRole);
   }, []);
+
   return userRole;
 };

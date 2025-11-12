@@ -8,6 +8,8 @@ declare module "react-router" {
 
 type Params = {
   "/": {};
+  "/auth/login": {};
+  "/auth/sign-up": {};
   "/dashboard": {};
   "/dashboard/about-me": {};
   "/dashboard/items": {};
@@ -21,6 +23,4 @@ type Params = {
   "/dashboard/item-users": {};
   "/dashboard/assign-to": {};
   "/dashboard/view-assign-data": {};
-  "/auth/login": {};
-  "/auth/sign-up": {};
 };

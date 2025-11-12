@@ -2,3 +2,5 @@ node_modules
 DS_Store
 Dockerfile
 build
+./localhost-cert.pem
+./localhost-key.pem

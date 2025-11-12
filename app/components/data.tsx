@@ -16,7 +16,7 @@ export const baseUrl = "https://localhost:7189";
 export const NavMenu = [
   {
     title: "Dashboard",
-    url: "/",
+    url: "/dashboard",
     icon: LayoutDashboardIcon,
   },
   {

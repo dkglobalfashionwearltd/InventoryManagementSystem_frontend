@@ -17,9 +17,9 @@ export const apiRequest = async (
     const { data } = await axios({
       method,
       url,
+      withCredentials: true,
       params: method === "get" ? params : undefined, // ✅ only for GET
       headers: {
-        Authorization: `Bearer ${token}`,
         Accept: "text/plain",
         "Content-Type": contentType,
       },

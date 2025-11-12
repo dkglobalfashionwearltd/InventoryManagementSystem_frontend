@@ -3,6 +3,7 @@ import {
   createAsyncThunk,
   type PayloadAction,
 } from "@reduxjs/toolkit";
+import axios from "axios";
 import { baseUrl } from "~/components/data";
 import { apiRequest } from "~/redux/data/GetData";
 
@@ -52,14 +53,20 @@ export const getAllItem = createAsyncThunk(
   "item/getAllItem",
   async ({ token }: { token: string | null }, { rejectWithValue }) => {
     try {
-      const res = await apiRequest(
-        "get",
-        `${baseUrl}/api/item/getall`,
-        token,
-        "application/json",
-        {},
-        null
-      );
+      // const res = await apiRequest(
+      //   "get",
+      //   `${baseUrl}/api/item/getall`,
+      //   token,
+      //   "application/json",
+      //   {},
+      //   null
+      // );
+      const { data: res } = await axios({
+        method: "get", // ✅ HTTP method
+        url: "https://localhost:7189/api/item/getall", // ✅ backend API URL
+        withCredentials: true, // ✅ send cookies
+      });
+
       return res;
     } catch (error: any) {
       console.log(error);

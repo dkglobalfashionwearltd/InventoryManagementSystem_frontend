@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { columns } from "~/components/columns/stock-columns";
 import { DataTable } from "~/components/custom-data-table/data-table";
 import { DataTableSkeleton } from "~/components/datatableskeleton";
-import { useToken } from "~/components/getToken";
 
 import { Separator } from "~/components/ui/separator";
 import { getAllStock } from "~/redux/features/Stock/stockSlice";
@@ -11,16 +10,14 @@ import { StockCreate } from "./stock-create";
 import { toast } from "sonner";
 
 const Stock = () => {
-  const token = useToken() as string;
   const dispatch = useAppDispatch();
   const [isAttempted, setIsAttempted] = useState<boolean>(true);
   const { loading, data, refresh } = useAppSelector((state) => state.stocks);
-  console.log("stock", data);
 
   useEffect(() => {
     fetchProducts();
     setIsAttempted(false);
-  }, [refresh]);
+  }, [dispatch, refresh]);
 
   // toaster
   useEffect(() => {
@@ -31,12 +28,12 @@ const Stock = () => {
       position: "top-right",
       richColors: true,
     });
-  }, [refresh]);
+  }, [dispatch, refresh]);
 
-  const fetchProducts = async () => {
-    await dispatch(getAllStock({ token }));
+  const fetchProducts = () => {
+    dispatch(getAllStock({ token: "" }));
   };
-  //   console.log(data?.result);
+
   return loading ? (
     <DataTableSkeleton />
   ) : (

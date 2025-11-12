@@ -25,15 +25,12 @@ import {
 } from "~/components/ui/drawer";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { Textarea } from "~/components/ui/textarea";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { useAppDispatch, useAppSelector } from "~/redux/hook";
+import { useAppDispatch } from "~/redux/hook";
 import { Plus } from "lucide-react";
-import { getAllItem } from "~/redux/features/Item/itemSlice";
+
 import { useToken, useUserId } from "~/components/getToken";
-import ComboboxForStock, {
-  type ComboboxOption,
-} from "~/components/comboboxForStock";
+
 import {
   Select,
   SelectContent,
@@ -48,6 +45,7 @@ import { manageStock } from "~/redux/features/Stock/stockSlice";
 type Stock = {
   itemId: number;
   itemName: string;
+  itemModel: string;
 };
 
 type StockProps = {
@@ -63,7 +61,7 @@ export function StockUpdate({ stock }: { stock: Stock }) {
   const token = useToken() as string;
 
   const dispatch = useAppDispatch();
-  const handleUpdate = async (formData: FormData, isClick: boolean) => {
+  const handleUpdate = (formData: FormData, isClick: boolean) => {
     dispatch(
       manageStock({
         token,
@@ -160,7 +158,7 @@ function StockCreateForm({ className, stock, onSubmit }: StockProps) {
       className={cn("grid items-start gap-4", className)}
       onSubmit={handleSubmit}
     >
-      {/* Category */}
+      {/* item */}
       <div className="grid gap-2">
         <Label htmlFor="name">Item</Label>
         <Input
@@ -168,6 +166,17 @@ function StockCreateForm({ className, stock, onSubmit }: StockProps) {
           id="name"
           name="name"
           value={stock.itemName}
+          disabled
+          required
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="name">Item Model</Label>
+        <Input
+          type="text"
+          id="name"
+          name="name"
+          value={stock.itemModel}
           disabled
           required
         />

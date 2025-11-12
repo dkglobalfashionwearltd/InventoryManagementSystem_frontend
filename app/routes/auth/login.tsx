@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, redirect, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import type { Route } from "./+types/login";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
@@ -12,14 +12,13 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-
 import ThemeToggler from "~/components/dark-mode/mode-toggler";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
-import { LoginReq } from "~/redux/features/auth/authSlice";
+import { loginUser } from "~/redux/features/auth/authSliceNew";
 import { Eye, EyeOff } from "lucide-react";
 import LoadingSpinner from "~/components/loading";
 import { toast } from "sonner";
-import { baseUrl } from "~/components/data";
+import { LoadingTyping } from "~/components/loading-components/loading-typing";
 import { useToken } from "~/components/getToken";
 
 export function meta({}: Route.MetaArgs) {
@@ -36,64 +35,87 @@ const Login = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
-  const token = useToken();
   const dispatch = useAppDispatch();
-  const { loading, data, error } = useAppSelector((state) => state.login);
-  const [formData, setFormData] = React.useState({
+  const { loginData: data, loading } = useAppSelector(
+    (state) => state.loginNew
+  );
+  const navigate = useNavigate();
+  const token = useToken();
+
+  const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [attemptedLogin, setAttemptedLogin] = React.useState(false);
-  const navigate = useNavigate();
+  const [checkingAuth, setCheckingAuth] = useState(true); // ✅ start as true
+  const [attemptedLogin, setAttemptedLogin] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    if (token) {
+    const timer = setTimeout(() => {
+      setCheckingAuth(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, []); // 👈 empty dependency array — runs only once
+
+  // ✅ Redirect if already logged in
+  useEffect(() => {
+    if (!checkingAuth && token) {
       navigate("/dashboard", { replace: true });
     }
-  }, [token]);
+  }, [checkingAuth, token, navigate]);
 
-  // toast
+  // ✅ Show toast after login attempt
   useEffect(() => {
     if (!attemptedLogin || !data) return;
-
     const showToast = data.success ? toast.success : toast.error;
-
     showToast(data.statusCode ?? data?.code, {
       description: data.message,
       position: "top-right",
       richColors: true,
     });
-
-    if (data.success) {
+    if (data?.success) {
       navigate("/dashboard", { replace: true });
     }
   }, [attemptedLogin, data, navigate]);
 
+  // ✅ Handle form logic
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { username, password } = formData;
     if (username && password) {
-      setAttemptedLogin(true);
       dispatch(
-        LoginReq({
-          username: username,
-          password: password,
-          baseUrl: baseUrl,
+        loginUser({
+          baseUrl: "https://localhost:7189",
+          data: { username, password, rememberMe: true },
         })
       );
+      setAttemptedLogin(true);
     }
   };
 
+  // ✅ Loading State
+  if (checkingAuth || loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-black">
+        <LoadingTyping />
+      </div>
+    );
+  }
+
+  // ✅ Don't show form if logged in
+  if (token || data?.success) return null;
+
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+    <div className="flex min-h-svh w-full items-center justify-center bg-black p-6 md:p-10">
       <div className="w-full max-w-sm">
         <div className={cn("flex flex-col gap-6", className)} {...props}>
-          <Card className="bg-transparent">
+          <Card className="bg-transparent border-white">
             <CardHeader>
               <div className="flex max-sm:gap-4 sm:justify-between">
                 <CardTitle className="text-2xl">Login</CardTitle>
@@ -120,6 +142,7 @@ const Login = ({
                       onChange={handleChange}
                     />
                   </div>
+
                   <div className="grid gap-2">
                     <div className="flex items-center">
                       <Label htmlFor="password">Password</Label>
@@ -130,7 +153,7 @@ const Login = ({
                         Forgot your password?
                       </a>
                     </div>
-                    <div className=" relative">
+                    <div className="relative">
                       <Input
                         id="password"
                         name="password"
@@ -155,6 +178,7 @@ const Login = ({
                       </button>
                     </div>
                   </div>
+
                   <Button type="submit" className="w-full">
                     {loading ? (
                       <LoadingSpinner className="flex items-center justify-center" />
@@ -162,12 +186,8 @@ const Login = ({
                       "Login"
                     )}
                   </Button>
+
                   <Button variant="outline" className="w-full">
-                    {/* {loading ? (
-                      <LoadingSpinner className="flex items-center justify-center" />
-                    ) : (
-                      "Login with Google"
-                    )} */}
                     Login with Google
                   </Button>
                 </div>
