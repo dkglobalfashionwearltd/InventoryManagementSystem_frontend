@@ -20,6 +20,7 @@ import LoadingSpinner from "~/components/loading";
 import { toast } from "sonner";
 import { LoadingTyping } from "~/components/loading-components/loading-typing";
 import { useToken } from "~/components/getToken";
+import { baseUrl } from "~/components/data";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -91,7 +92,7 @@ const Login = ({
     if (username && password) {
       dispatch(
         loginUser({
-          baseUrl: "https://localhost:7189",
+          baseUrl: baseUrl,
           data: { username, password, rememberMe: true },
         })
       );

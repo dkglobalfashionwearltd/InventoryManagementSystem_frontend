@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { refreshToken } from "~/redux/features/auth/authSliceNew";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
+import { baseUrl } from "./data";
 
 const TokenRefresher = () => {
   const dispatch = useAppDispatch();
@@ -9,12 +10,12 @@ const TokenRefresher = () => {
   useEffect(() => {
     if (!loginData?.result) return;
     // ✅ Immediately refresh once on mount
-    dispatch(refreshToken({ baseUrl: "https://localhost:7189" }));
+    dispatch(refreshToken({ baseUrl: baseUrl }));
 
     // ✅ Set interval to refresh every 30 minutes
     const interval = setInterval(() => {
       console.log("🔄 Refreshing token...");
-      dispatch(refreshToken({ baseUrl: "https://localhost:7189" }));
+      dispatch(refreshToken({ baseUrl: baseUrl }));
     }, 30 * 60 * 1000); // 30 minutes in milliseconds
 
     // ✅ Cleanup on unmount

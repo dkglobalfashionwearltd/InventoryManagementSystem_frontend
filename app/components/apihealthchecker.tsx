@@ -34,8 +34,6 @@ export function ApiHealthChecker() {
             position: "top-right",
             richColors: true,
           });
-          // dispatch(clearToken());
-          // window.location.reload();
           setIsApiUp(false);
         }
       }

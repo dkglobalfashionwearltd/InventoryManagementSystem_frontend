@@ -53,20 +53,14 @@ export const getAllItem = createAsyncThunk(
   "item/getAllItem",
   async ({ token }: { token: string | null }, { rejectWithValue }) => {
     try {
-      // const res = await apiRequest(
-      //   "get",
-      //   `${baseUrl}/api/item/getall`,
-      //   token,
-      //   "application/json",
-      //   {},
-      //   null
-      // );
-      const { data: res } = await axios({
-        method: "get", // ✅ HTTP method
-        url: "https://localhost:7189/api/item/getall", // ✅ backend API URL
-        withCredentials: true, // ✅ send cookies
-      });
-
+      const res = await apiRequest(
+        "get",
+        `${baseUrl}/api/item/getall`,
+        token,
+        "application/json",
+        {},
+        null
+      );
       return res;
     } catch (error: any) {
       console.log(error);

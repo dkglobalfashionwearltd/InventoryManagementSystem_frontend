@@ -1,12 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import type { Route } from "./+types/home";
-import ThemeToggler from "~/components/dark-mode/mode-toggler";
 import { SectionCards } from "~/components/section-cards";
 import { ChartAreaInteractive } from "~/components/chart-area-interactive";
 import CardVisitorsSkeleton from "~/components/chart-skeleton";
-import { Button } from "~/components/ui/button";
-import { useAppDispatch } from "~/redux/hook";
-import { refreshToken } from "~/redux/features/auth/authSliceNew";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -20,7 +16,6 @@ export function meta({}: Route.MetaArgs) {
 
 const Home = () => {
   const [loading, setLoading] = React.useState(false);
-  const dispatch = useAppDispatch();
 
   return (
     <div className="flex flex-1 flex-col">
@@ -31,13 +26,6 @@ const Home = () => {
             {loading ? <CardVisitorsSkeleton /> : <ChartAreaInteractive />}
           </div>
         </div>
-        <Button
-          onClick={() =>
-            dispatch(refreshToken({ baseUrl: "https://localhost:7189" }))
-          }
-        >
-          Refresh Token
-        </Button>
       </div>
     </div>
   );
