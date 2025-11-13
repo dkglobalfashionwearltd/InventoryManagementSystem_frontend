@@ -27,15 +27,10 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
-import { Plus } from "lucide-react";
-import { useToken } from "~/components/getToken";
 import { getAllDepartment } from "~/redux/features/Department/departmentSlice";
-import {
-  createItemUser,
-  updateItemUser,
-} from "~/redux/features/Item-User/itemUserSlice";
-import type { ComboboxOption } from "~/components/combobox";
+import { updateItemUser } from "~/redux/features/Item-User/itemUserSlice";
 import Combobox from "~/components/combobox";
+import { getToken } from "~/components/getLocalStorage";
 
 type ItemUser = {
   itemUserId: number;
@@ -55,23 +50,24 @@ type ItemUserUpdateProps = {
 type ItemUserProps = {
   itemUser: ItemUser;
   className?: string;
-  onSubmit: (formData: FormData, isClick: boolean) => void;
+  onSubmit: (formData: FormData) => void;
 };
 
 export function ItemUserUpdate({ itemUser }: ItemUserUpdateProps) {
-  // const url = window.location.origin;
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const token = useToken();
+  const token = getToken();
 
   const dispatch = useAppDispatch();
-  const handleUpdate = async (formData: FormData, isClick: boolean) => {
-    dispatch(
-      updateItemUser({
-        token,
-        formPayload: formData,
-      })
-    );
+  const handleUpdate = async (formData: FormData) => {
+    if (token) {
+      dispatch(
+        updateItemUser({
+          token,
+          formPayload: formData,
+        })
+      );
+    }
   };
 
   if (isDesktop) {
@@ -142,12 +138,14 @@ function ItemUserUpdateForm({ className, itemUser, onSubmit }: ItemUserProps) {
   });
 
   const dispatch = useAppDispatch();
-  const { loading, data, error } = useAppSelector((state) => state.departments);
-  const token = useToken();
+  const { loading, data } = useAppSelector((state) => state.departments);
+  const token = getToken();
 
   // load departments on mount
   React.useEffect(() => {
-    dispatch(getAllDepartment({ token }));
+    if (token) {
+      dispatch(getAllDepartment({ token }));
+    }
   }, [dispatch, token]);
 
   // recompute department option every render
@@ -166,7 +164,7 @@ function ItemUserUpdateForm({ className, itemUser, onSubmit }: ItemUserProps) {
     Object.entries(formData).forEach(([k, v]) =>
       formPayload.append(k, String(v ?? ""))
     );
-    onSubmit(formPayload, true);
+    onSubmit(formPayload);
   };
 
   return (

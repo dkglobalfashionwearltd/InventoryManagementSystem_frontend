@@ -31,7 +31,7 @@ const initialState: StateType = {
 
 export const getAllUser = createAsyncThunk(
   "user/getAllUser",
-  async ({ token }: { token: string | null }, { rejectWithValue }) => {
+  async ({ token }: { token: string }, { rejectWithValue }) => {
     try {
       const res = await apiRequest(
         "get",
@@ -54,7 +54,7 @@ export const getAllUser = createAsyncThunk(
 export const getUser = createAsyncThunk(
   "user/getUser",
   async (
-    { userId, token }: { userId: string; token: string | null },
+    { userId, token }: { userId: string | null; token: string },
     { rejectWithValue }
   ) => {
     try {

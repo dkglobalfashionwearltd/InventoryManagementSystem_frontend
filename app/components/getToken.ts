@@ -1,21 +1,4 @@
 import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
-
-interface DecodedToken {
-  exp?: number;
-  [key: string]: any;
-}
-
-// export const useToken = () => {
-//   const [token, setToken] = useState<string | null | undefined>(undefined);
-
-//   useEffect(() => {
-//     // const storeToken = localStorage.getItem("token");
-//     const storeToken = document.cookie("session_token");
-//     setToken(storeToken);
-//   }, []);
-//   return token;
-// };
 
 export const useToken = () => {
   const [token, setToken] = useState<string | null>(null);

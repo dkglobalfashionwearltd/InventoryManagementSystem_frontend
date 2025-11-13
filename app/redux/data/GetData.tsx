@@ -1,5 +1,5 @@
 import axios from "axios";
-import { toast } from "sonner";
+import { getToken } from "~/components/getLocalStorage";
 
 type Params = {
   [key: string]: any;
@@ -17,9 +17,9 @@ export const apiRequest = async (
     const { data } = await axios({
       method,
       url,
-      withCredentials: true,
       params: method === "get" ? params : undefined, // ✅ only for GET
       headers: {
+        Authorization: `Bearer ${token}`,
         Accept: "text/plain",
         "Content-Type": contentType,
       },

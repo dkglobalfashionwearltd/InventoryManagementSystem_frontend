@@ -28,28 +28,30 @@ import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { useAppDispatch } from "~/redux/hook";
 import { Plus } from "lucide-react";
-import { useToken } from "~/components/getToken";
 import { createDepartment } from "~/redux/features/Department/departmentSlice";
+import { getToken } from "~/components/getLocalStorage";
 
 type CateogryProps = {
   className?: string;
-  onSubmit: (formData: FormData, isClick: boolean) => void;
+  onSubmit: (formData: FormData) => void;
 };
 
 export function DepartmentCreate() {
   // const url = window.location.origin;
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const token = useToken() as string;
+  const token = getToken();
 
   const dispatch = useAppDispatch();
-  const handleUpdate = async (formData: FormData, isClick: boolean) => {
-    dispatch(
-      createDepartment({
-        token,
-        formPayload: formData,
-      })
-    );
+  const handleUpdate = async (formData: FormData) => {
+    if (token) {
+      dispatch(
+        createDepartment({
+          token,
+          formPayload: formData,
+        })
+      );
+    }
   };
 
   if (isDesktop) {
@@ -126,7 +128,7 @@ function DepartmentCreateForm({ className, onSubmit }: CateogryProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formPayload, true);
+    onSubmit(formPayload);
   };
 
   return (

@@ -27,9 +27,8 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { useAppDispatch } from "~/redux/hook";
-import { updateCategory } from "~/redux/features/Category/categorySlice";
-import { useToken } from "~/components/getToken";
 import { updateDepartment } from "~/redux/features/Department/departmentSlice";
+import { getToken } from "~/components/getLocalStorage";
 
 type Department = {
   departmentId: number;
@@ -42,22 +41,24 @@ type DepartmentUpdateProps = {
 type DepartmentProps = {
   department: Department;
   className?: string;
-  onSubmit: (formData: FormData, isClick: boolean) => void;
+  onSubmit: (formData: FormData) => void;
 };
 
 export function DepartmentStatus({ department }: DepartmentUpdateProps) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const token = useToken() as string;
+  const token = getToken();
 
   const dispatch = useAppDispatch();
-  const handleUpdate = async (formData: FormData, isClick: boolean) => {
-    dispatch(
-      updateDepartment({
-        token,
-        formPayload: formData,
-      })
-    );
+  const handleUpdate = async (formData: FormData) => {
+    if (token) {
+      dispatch(
+        updateDepartment({
+          token,
+          formPayload: formData,
+        })
+      );
+    }
   };
 
   if (isDesktop) {
@@ -143,7 +144,7 @@ function DepartmentUpdateForm({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formPayload, true);
+    onSubmit(formPayload);
   };
 
   return (

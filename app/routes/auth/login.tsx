@@ -14,13 +14,13 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import ThemeToggler from "~/components/dark-mode/mode-toggler";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
-import { loginUser } from "~/redux/features/auth/authSliceNew";
 import { Eye, EyeOff } from "lucide-react";
 import LoadingSpinner from "~/components/loading";
 import { toast } from "sonner";
 import { LoadingTyping } from "~/components/loading-components/loading-typing";
-import { useToken } from "~/components/getToken";
-import { baseUrl } from "~/components/data";
+import { getToken } from "~/components/getLocalStorage";
+import { LoginRequest } from "~/redux/features/auth/authSlice";
+import { Checkbox } from "~/components/ui/checkbox";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -37,27 +37,18 @@ const Login = ({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
   const dispatch = useAppDispatch();
-  const { loginData: data, loading } = useAppSelector(
-    (state) => state.loginNew
-  );
+  const { data, loading } = useAppSelector((state) => state.login);
   const navigate = useNavigate();
-  const token = useToken();
+  const token = getToken();
 
   const [formData, setFormData] = useState({
-    username: "",
+    userName: "",
     password: "",
+    rememberMe: false,
   });
   const [checkingAuth, setCheckingAuth] = useState(true); // ✅ start as true
   const [attemptedLogin, setAttemptedLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCheckingAuth(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, []); // 👈 empty dependency array — runs only once
 
   // ✅ Redirect if already logged in
   useEffect(() => {
@@ -88,26 +79,13 @@ const Login = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { username, password } = formData;
-    if (username && password) {
-      dispatch(
-        loginUser({
-          baseUrl: baseUrl,
-          data: { username, password, rememberMe: true },
-        })
-      );
-      setAttemptedLogin(true);
-    }
-  };
-
-  // ✅ Loading State
-  if (checkingAuth || loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-black">
-        <LoadingTyping />
-      </div>
+    dispatch(
+      LoginRequest({
+        req: formData,
+      })
     );
-  }
+    setAttemptedLogin(true);
+  };
 
   // ✅ Don't show form if logged in
   if (token || data?.success) return null;
@@ -133,13 +111,13 @@ const Login = ({
               <form onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-6">
                   <div className="grid gap-2">
-                    <Label htmlFor="username">User Name</Label>
+                    <Label htmlFor="userName">User Name</Label>
                     <Input
-                      id="username"
-                      name="username"
+                      id="userName"
+                      name="userName"
                       type="text"
                       required
-                      value={formData.username}
+                      value={formData.userName}
                       onChange={handleChange}
                     />
                   </div>
@@ -180,16 +158,30 @@ const Login = ({
                     </div>
                   </div>
 
+                  <div className="">
+                    <Label className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-green-600 has-[[aria-checked=true]]:bg-green-50 dark:has-[[aria-checked=true]]:border-green-900 dark:has-[[aria-checked=true]]:bg-green-950">
+                      <Checkbox
+                        checked={formData.rememberMe}
+                        onCheckedChange={(checked: boolean) =>
+                          setFormData({ ...formData, rememberMe: checked })
+                        }
+                        id="remember"
+                        className="data-[state=checked]:border-green-600 data-[state=checked]:bg-green-600 data-[state=checked]:text-white dark:data-[state=checked]:border-green-700 dark:data-[state=checked]:bg-green-700"
+                      />
+                      <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                          Remember Me
+                        </p>
+                      </div>
+                    </Label>
+                  </div>
+
                   <Button type="submit" className="w-full">
                     {loading ? (
                       <LoadingSpinner className="flex items-center justify-center" />
                     ) : (
                       "Login"
                     )}
-                  </Button>
-
-                  <Button variant="outline" className="w-full">
-                    Login with Google
                   </Button>
                 </div>
                 <div className="mt-4 text-center text-sm">

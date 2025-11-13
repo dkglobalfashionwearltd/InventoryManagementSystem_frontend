@@ -3,14 +3,19 @@ import {
   createSlice,
   type PayloadAction,
 } from "@reduxjs/toolkit";
-import { baseUrl } from "~/components/data";
 import { apiRequest } from "~/redux/data/GetData";
 import { Login } from "~/redux/data/LoginData";
 
+interface LoginReq {
+  userName: string;
+  password: string;
+  rememberMe: boolean;
+}
 interface response {
   userId: string;
   role: string;
   token: string;
+  tokenExpire: string;
 }
 interface Data {
   statusCode: number;
@@ -29,23 +34,19 @@ const initialState: StateType = {
   error: null,
 };
 
-export const LoginReq = createAsyncThunk(
+export const LoginRequest = createAsyncThunk(
   "auth/login",
   async (
     {
-      username,
-      password,
-      baseUrl,
+      req,
     }: {
-      username: string;
-      password: string;
-      baseUrl: string;
+      req: LoginReq;
     },
     { rejectWithValue }
   ) => {
     try {
-      console.log("slice", username, password);
-      const res = await Login(username, password, baseUrl);
+      console.log("slice", req);
+      const res = await Login(req);
       console.log("sliceRes", res);
       return res;
     } catch (error: any) {
@@ -66,25 +67,27 @@ const authSlice = createSlice({
       localStorage.removeItem("userId");
       localStorage.removeItem("token");
       localStorage.removeItem("userRole");
+      localStorage.removeItem("tokenExpire");
       return { ...initialState, data: null }; // reset
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(LoginReq.pending, (state) => {
+      .addCase(LoginRequest.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(LoginReq.fulfilled, (state, action: PayloadAction<Data>) => {
+      .addCase(LoginRequest.fulfilled, (state, action: PayloadAction<Data>) => {
         state.data = action.payload;
         if (state.data?.success) {
           localStorage.setItem("userId", state.data?.result?.userId);
           localStorage.setItem("token", state.data?.result?.token);
           localStorage.setItem("userRole", state.data?.result?.role);
+          localStorage.setItem("tokenExpire", state.data?.result?.tokenExpire);
         }
         state.loading = false;
       })
-      .addCase(LoginReq.rejected, (state, action) => {
+      .addCase(LoginRequest.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error as string;
       });

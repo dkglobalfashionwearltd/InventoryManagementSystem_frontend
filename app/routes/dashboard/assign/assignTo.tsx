@@ -8,7 +8,7 @@ import ComboboxItem, {
 import ComboboxItemUser, {
   type ComboboxOption,
 } from "~/components/comboboxItemUser";
-import { useToken } from "~/components/getToken";
+import { getToken } from "~/components/getLocalStorage";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -28,7 +28,7 @@ const AssignTo = () => {
     data: assignData,
     refresh,
   } = useAppSelector((state) => state.assign);
-  const token = useToken() as string;
+  const token = getToken();
 
   const [selected, setSelected] = React.useState<ComboboxOption | null>(null);
   const [selectedUser, setSelectedUser] = React.useState<ComboboxOption[]>([]);
@@ -53,10 +53,12 @@ const AssignTo = () => {
   });
 
   useEffect(() => {
-    dispatch(getAllItemUser({ token }));
-    dispatch(getAllItem({ token }));
+    if (token) {
+      dispatch(getAllItemUser({ token }));
+      dispatch(getAllItem({ token }));
+    }
     setIsAttempted(false);
-  }, [refresh]);
+  }, [dispatch, token, refresh]);
 
   useEffect(() => {
     if (isAttempted) return;
@@ -77,8 +79,9 @@ const AssignTo = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    dispatch(createAssignment({ token, formPayload: formData }));
+    if (token) {
+      dispatch(createAssignment({ token, formPayload: formData }));
+    }
   };
 
   return (

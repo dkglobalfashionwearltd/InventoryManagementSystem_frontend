@@ -5,12 +5,12 @@ import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import ComboboxItem, { type ComboboxOption } from "~/components/comboboxItem";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
-import { createItem, updateItem } from "~/redux/features/Item/itemSlice";
+import { updateItem } from "~/redux/features/Item/itemSlice";
 import { getAllCategory } from "~/redux/features/Category/categorySlice";
-import { useToken } from "~/components/getToken";
 import { useLocation, useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import LoadingSpinner from "~/components/loading";
+import { getToken } from "~/components/getLocalStorage";
 
 type Item = {
   itemId: number;
@@ -62,7 +62,7 @@ const UpdateItem = ({ className }: ItemProps) => {
     React.useState<ComboboxOption | null>(null);
 
   const dispatch = useAppDispatch();
-  const token = useToken() as string;
+  const token = getToken();
   const { data } = useAppSelector((state) => state.categories);
   const { loading: itemsLoading, data: items } = useAppSelector(
     (state) => state.items
@@ -76,7 +76,9 @@ const UpdateItem = ({ className }: ItemProps) => {
     ) ?? null;
 
   React.useEffect(() => {
-    dispatch(getAllCategory({ token }));
+    if (token) {
+      dispatch(getAllCategory({ token }));
+    }
   }, [dispatch, token]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +91,9 @@ const UpdateItem = ({ className }: ItemProps) => {
     Object.entries(formData).forEach(([k, v]) =>
       formPayload.append(k, String(v ?? ""))
     );
-    dispatch(updateItem({ token, formPayload }));
+    if (token) {
+      dispatch(updateItem({ token, formPayload }));
+    }
     navigate("/dashboard/items");
   };
 

@@ -1,7 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import * as React from "react";
 import { useNavigate } from "react-router";
-import { useToken } from "~/components/getToken";
+import { getToken } from "~/components/getLocalStorage";
 import LoadingSpinner from "~/components/loading";
 import {
   Accordion,
@@ -52,13 +52,15 @@ type ApiResponse = {
 export default function UserItemViewer() {
   const dispatch = useAppDispatch();
   const [searchTerm, setSearchTerm] = React.useState("");
-  const token = useToken() as string;
+  const token = getToken();
   const navigation = useNavigate();
   const { loading, data } = useAppSelector((state) => state.assign);
 
   React.useEffect(() => {
-    dispatch(getAllAssignment({ token }));
-  }, []);
+    if (token) {
+      dispatch(getAllAssignment({ token }));
+    }
+  }, [dispatch, token]);
 
   if (loading) {
     return (

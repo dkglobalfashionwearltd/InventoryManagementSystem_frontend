@@ -7,17 +7,17 @@ import ComboboxItem, { type ComboboxOption } from "~/components/comboboxItem";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
 import { createItem } from "~/redux/features/Item/itemSlice";
 import { getAllCategory } from "~/redux/features/Category/categorySlice";
-import { useToken, useUserId } from "~/components/getToken";
 import { useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import LoadingSpinner from "~/components/loading";
+import { getToken, getUserId } from "~/components/getLocalStorage";
 
 type ItemProps = {
   className?: string;
 };
 
 const CreatItem = ({ className }: ItemProps) => {
-  const userId = useUserId();
+  const userId = getUserId();
   const [formData, setFormData] = React.useState({
     name: "",
     modelNumber: "",
@@ -46,13 +46,15 @@ const CreatItem = ({ className }: ItemProps) => {
     React.useState<ComboboxOption | null>(null);
 
   const dispatch = useAppDispatch();
-  const token = useToken() as string;
+  const token = getToken();
   const { data } = useAppSelector((state) => state.categories);
   const { loading: itemsLoading } = useAppSelector((state) => state.items);
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    dispatch(getAllCategory({ token }));
+    if (token) {
+      dispatch(getAllCategory({ token }));
+    }
   }, [dispatch, token]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +67,9 @@ const CreatItem = ({ className }: ItemProps) => {
     Object.entries(formData).forEach(([k, v]) =>
       formPayload.append(k, String(v ?? ""))
     );
-    dispatch(createItem({ token, formPayload }));
+    if (token) {
+      dispatch(createItem({ token, formPayload }));
+    }
     navigate("/dashboard/items");
   };
 

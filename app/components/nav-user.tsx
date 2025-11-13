@@ -157,25 +157,27 @@ import {
   DropdownMenuItem,
 } from "~/components/ui/dropdown-menu";
 import { BellIcon, LogOutIcon, UserCircleIcon } from "lucide-react";
-import { useUserId } from "./getToken";
+import { getToken, getUserId } from "./getLocalStorage";
+import { clearToken } from "~/redux/features/auth/authSlice";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const userId = useUserId();
+  const userId = getUserId();
+  const token = getToken();
 
   const { loading: userLoading, data } = useAppSelector((state) => state.user);
 
   // Fetch user data once we have userId
   useEffect(() => {
-    if (userId) {
-      dispatch(getUser({ userId, token: "" }));
+    if (userId && token) {
+      dispatch(getUser({ userId, token }));
     }
   }, [userId, dispatch]);
 
   const handleLogout = () => {
-    dispatch(logoutUser({ baseUrl: "https://localhost:7189" }));
+    dispatch(clearToken());
     window.location.reload();
   };
 

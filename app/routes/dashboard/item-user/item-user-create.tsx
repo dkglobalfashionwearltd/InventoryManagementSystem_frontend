@@ -28,31 +28,32 @@ import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
 import { Plus } from "lucide-react";
-import { useToken } from "~/components/getToken";
 import { getAllDepartment } from "~/redux/features/Department/departmentSlice";
 import { createItemUser } from "~/redux/features/Item-User/itemUserSlice";
 import type { ComboboxOption } from "~/components/combobox";
 import Combobox from "~/components/combobox";
+import { getToken } from "~/components/getLocalStorage";
 
 type ItemUserProps = {
   className?: string;
-  onSubmit: (formData: FormData, isClick: boolean) => void;
+  onSubmit: (formData: FormData) => void;
 };
 
 export function ItemUserCreate() {
-  // const url = window.location.origin;
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const token = useToken() as string;
+  const token = getToken();
 
   const dispatch = useAppDispatch();
-  const handleUpdate = async (formData: FormData, isClick: boolean) => {
-    dispatch(
-      createItemUser({
-        token,
-        formPayload: formData,
-      })
-    );
+  const handleUpdate = async (formData: FormData) => {
+    if (token) {
+      dispatch(
+        createItemUser({
+          token,
+          formPayload: formData,
+        })
+      );
+    }
   };
 
   if (isDesktop) {
@@ -128,11 +129,13 @@ function ItemUserCreateForm({ className, onSubmit }: ItemUserProps) {
   const [selected, setSelected] = React.useState<ComboboxOption | null>(null);
 
   const dispatch = useAppDispatch();
-  const { loading, data, error } = useAppSelector((state) => state.departments);
-  const token = useToken() as string;
+  const { loading, data } = useAppSelector((state) => state.departments);
+  const token = getToken();
   React.useEffect(() => {
-    dispatch(getAllDepartment({ token }));
-  }, []);
+    if (token) {
+      dispatch(getAllDepartment({ token }));
+    }
+  }, [dispatch, token]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -145,7 +148,7 @@ function ItemUserCreateForm({ className, onSubmit }: ItemUserProps) {
       formPayload.append(k, String(v ?? ""))
     );
 
-    onSubmit(formPayload, true);
+    onSubmit(formPayload);
   };
 
   return (

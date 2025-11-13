@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DataTable } from "~/components/custom-data-table/data-table";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
 import { DataTableSkeleton } from "~/components/datatableskeleton";
 import { Separator } from "~/components/ui/separator";
-import { useToken } from "~/components/getToken";
 import { toast } from "sonner";
 import { columns } from "~/components/columns/item-user-columns";
 import { getAllItemUser } from "~/redux/features/Item-User/itemUserSlice";
 import { ItemUserCreate } from "./item-user-create";
+import { getToken } from "~/components/getLocalStorage";
 
 const ItemUser = () => {
-  const token = useToken() as string;
+  const token = getToken();
   const dispatch = useAppDispatch();
   const [isAttempted, setIsAttempted] = useState<boolean>(true);
   const { loading, data, refresh } = useAppSelector((state) => state.itemUsers);
@@ -18,7 +18,7 @@ const ItemUser = () => {
   useEffect(() => {
     fetchProducts();
     setIsAttempted(false);
-  }, [refresh]);
+  }, [dispatch, token, refresh]);
 
   // toaster
   useEffect(() => {
@@ -32,7 +32,9 @@ const ItemUser = () => {
   }, [refresh]);
 
   const fetchProducts = async () => {
-    await dispatch(getAllItemUser({ token }));
+    if (token) {
+      await dispatch(getAllItemUser({ token }));
+    }
   };
 
   return loading ? (

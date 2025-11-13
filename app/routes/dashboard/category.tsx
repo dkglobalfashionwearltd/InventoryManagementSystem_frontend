@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { DataTable } from "~/components/custom-data-table/data-table";
 import { columns } from "~/components/columns/category-columns";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
@@ -7,21 +6,21 @@ import { getAllCategory } from "~/redux/features/Category/categorySlice";
 import { DataTableSkeleton } from "~/components/datatableskeleton";
 import { Separator } from "~/components/ui/separator";
 import { CategoryCreate } from "./category-create";
-import { useToken } from "~/components/getToken";
 import { toast } from "sonner";
+import { getToken } from "~/components/getLocalStorage";
 
 const Category = () => {
-  const token = useToken();
+  const token = getToken();
   const dispatch = useAppDispatch();
   const [isAttempted, setIsAttempted] = useState<boolean>(true);
-  const { loading, data, error, refresh } = useAppSelector(
+  const { loading, data, refresh } = useAppSelector(
     (state) => state.categories
   );
 
   useEffect(() => {
     fetchProducts();
     setIsAttempted(false);
-  }, [refresh]);
+  }, [dispatch, refresh, token]);
 
   // toaster
   useEffect(() => {
@@ -35,7 +34,9 @@ const Category = () => {
   }, [refresh]);
 
   const fetchProducts = () => {
-    dispatch(getAllCategory({ token }));
+    if (token) {
+      dispatch(getAllCategory({ token }));
+    }
   };
 
   return loading ? (

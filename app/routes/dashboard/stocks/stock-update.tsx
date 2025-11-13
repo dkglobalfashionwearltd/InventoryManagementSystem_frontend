@@ -29,8 +29,6 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { useAppDispatch } from "~/redux/hook";
 import { Plus } from "lucide-react";
 
-import { useToken, useUserId } from "~/components/getToken";
-
 import {
   Select,
   SelectContent,
@@ -41,6 +39,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { manageStock } from "~/redux/features/Stock/stockSlice";
+import { getToken, getUserId } from "~/components/getLocalStorage";
 
 type Stock = {
   itemId: number;
@@ -51,23 +50,24 @@ type Stock = {
 type StockProps = {
   className?: string;
   stock: Stock;
-  onSubmit: (formData: FormData, isClick: boolean) => void;
+  onSubmit: (formData: FormData) => void;
 };
 
 export function StockUpdate({ stock }: { stock: Stock }) {
-  // const url = window.location.origin;
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const token = useToken() as string;
+  const token = getToken();
 
   const dispatch = useAppDispatch();
-  const handleUpdate = (formData: FormData, isClick: boolean) => {
-    dispatch(
-      manageStock({
-        token,
-        formPayload: formData,
-      })
-    );
+  const handleUpdate = (formData: FormData) => {
+    if (token) {
+      dispatch(
+        manageStock({
+          token,
+          formPayload: formData,
+        })
+      );
+    }
   };
 
   if (isDesktop) {
@@ -129,7 +129,7 @@ export function StockUpdate({ stock }: { stock: Stock }) {
 }
 
 function StockCreateForm({ className, stock, onSubmit }: StockProps) {
-  const userId = useUserId();
+  const userId = getUserId();
   const [formData, setFormData] = React.useState({
     quantity: "",
     actionType: "",
@@ -150,7 +150,7 @@ function StockCreateForm({ className, stock, onSubmit }: StockProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formPayload, true);
+    onSubmit(formPayload);
   };
 
   return (

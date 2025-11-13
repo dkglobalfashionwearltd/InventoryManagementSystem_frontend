@@ -3,16 +3,16 @@ import { DataTable } from "~/components/custom-data-table/data-table";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
 import { DataTableSkeleton } from "~/components/datatableskeleton";
 import { Separator } from "~/components/ui/separator";
-import { useToken } from "~/components/getToken";
 import { toast } from "sonner";
 import { columns } from "~/components/columns/item-columns";
 import { getAllItem } from "~/redux/features/Item/itemSlice";
 import { Button } from "~/components/ui/button";
-import { Plus, PlusCircle } from "lucide-react";
-import { Link, Outlet } from "react-router";
+import { PlusCircle } from "lucide-react";
+import { Link } from "react-router";
+import { getToken } from "~/components/getLocalStorage";
 
 const Item = () => {
-  const token = useToken() as string;
+  const token = getToken();
   const dispatch = useAppDispatch();
   const [isAttempted, setIsAttempted] = useState<boolean>(true);
   const { loading, data, refresh } = useAppSelector((state) => state.items);
@@ -20,7 +20,7 @@ const Item = () => {
   useEffect(() => {
     fetchProducts();
     setIsAttempted(false);
-  }, [refresh]);
+  }, [dispatch, token, refresh]);
 
   // toaster
   useEffect(() => {
@@ -34,9 +34,10 @@ const Item = () => {
   }, [refresh]);
 
   const fetchProducts = async () => {
-    await dispatch(getAllItem({ token }));
+    if (token) {
+      await dispatch(getAllItem({ token }));
+    }
   };
-  console.log(data?.result);
   return loading ? (
     <DataTableSkeleton />
   ) : (

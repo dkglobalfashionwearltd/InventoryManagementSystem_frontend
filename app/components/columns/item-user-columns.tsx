@@ -3,6 +3,7 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { DepartmentUpdate } from "~/routes/dashboard/department/department-update";
 import { DepartmentStatus } from "~/routes/dashboard/department/department-Status";
 import { ItemUserUpdate } from "~/routes/dashboard/item-user/item-user-update";
+import { ItemUserStatusUpdate } from "~/routes/dashboard/item-user/item-user-Status";
 
 type ItemUser = {
   itemUserId: number;
@@ -90,6 +91,7 @@ export const columns: ColumnDef<ItemUser>[] = [
       return (
         <div className="flex gap-4">
           <ItemUserUpdate itemUser={itemUser} />
+          <ItemUserStatusUpdate itemUser={itemUser} />
           {/* <DepartmentStatus department={department} /> */}
         </div>
       );

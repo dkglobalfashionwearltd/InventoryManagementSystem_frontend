@@ -25,11 +25,11 @@ import {
 } from "~/components/ui/drawer";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { Textarea } from "~/components/ui/textarea";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { useAppDispatch } from "~/redux/hook";
 import { updateCategory } from "~/redux/features/Category/categorySlice";
-import { useToken } from "~/components/getToken";
+
+import { getToken } from "~/components/getLocalStorage";
 
 type category = {
   categoryId: number;
@@ -48,16 +48,18 @@ type CateogryProps = {
 export function CategoryStatus({ category }: CateogryUpdateProps) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const token = useToken();
+  const token = getToken();
 
   const dispatch = useAppDispatch();
   const handleUpdate = async (formData: FormData, isClick: boolean) => {
-    dispatch(
-      updateCategory({
-        token,
-        formPayload: formData,
-      })
-    );
+    if (token) {
+      dispatch(
+        updateCategory({
+          token,
+          formPayload: formData,
+        })
+      );
+    }
   };
 
   if (isDesktop) {

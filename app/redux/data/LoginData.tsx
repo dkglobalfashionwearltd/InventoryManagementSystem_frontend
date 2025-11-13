@@ -1,22 +1,19 @@
 import axios from "axios";
-export const Login = async (
-  username: string,
-  password: string,
-  baseUrl: string
-) => {
-  console.log(username, password, baseUrl);
+import { baseUrl } from "~/components/data";
+interface LoginReq {
+  userName: string;
+  password: string;
+  rememberMe: boolean;
+}
+export const Login = async (req: LoginReq) => {
+  console.log(req);
   try {
-    const { data } = await axios.post(
-      `${baseUrl}/api/auth/user/login`,
-      {},
-      {
-        params: { userName: username, password: password },
-        headers: {
-          Accept: "text/plain",
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const { data } = await axios.post(`${baseUrl}/api/auth/user/login`, req, {
+      headers: {
+        Accept: "text/plain",
+        "Content-Type": "application/json",
+      },
+    });
     return data; // your user data
   } catch (error: any) {
     if (axios.isAxiosError(error)) {

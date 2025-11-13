@@ -27,37 +27,38 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { useAppDispatch } from "~/redux/hook";
-import { updateCategory } from "~/redux/features/Category/categorySlice";
-import { useToken } from "~/components/getToken";
 import { updateDepartment } from "~/redux/features/Department/departmentSlice";
+import { getToken } from "~/components/getLocalStorage";
 
-type Department = {
-  departmentId: number;
+type ItemUser = {
+  itemUserId: number;
   name: string;
   status: string;
 };
-type DepartmentUpdateProps = {
-  department: Department;
+type ItemUserStatusUpdateProps = {
+  itemUser: ItemUser;
 };
-type DepartmentProps = {
-  department: Department;
+type ItemUserProps = {
+  itemUser: ItemUser;
   className?: string;
-  onSubmit: (formData: FormData, isClick: boolean) => void;
+  onSubmit: (formData: FormData) => void;
 };
 
-export function DepartmentStatus({ department }: DepartmentUpdateProps) {
+export function ItemUserStatusUpdate({ itemUser }: ItemUserStatusUpdateProps) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const token = useToken();
+  const token = getToken();
 
   const dispatch = useAppDispatch();
-  const handleUpdate = async (formData: FormData, isClick: boolean) => {
-    dispatch(
-      updateDepartment({
-        token,
-        formPayload: formData,
-      })
-    );
+  const handleUpdate = async (formData: FormData) => {
+    if (token) {
+      dispatch(
+        updateDepartment({
+          token,
+          formPayload: formData,
+        })
+      );
+    }
   };
 
   if (isDesktop) {
@@ -68,14 +69,14 @@ export function DepartmentStatus({ department }: DepartmentUpdateProps) {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[525px] text-black dark:text-white">
           <DialogHeader>
-            <DialogTitle>Change Status Department</DialogTitle>
+            <DialogTitle>Change Status Item User</DialogTitle>
             <DialogDescription>
               Are you sure! you cannot undo this action.
             </DialogDescription>
           </DialogHeader>
           <ScrollArea className="h-auto">
-            <DepartmentUpdateForm
-              department={department}
+            <ItemUserStatusUpdateForm
+              itemUser={itemUser}
               onSubmit={handleUpdate}
             />
           </ScrollArea>
@@ -98,14 +99,14 @@ export function DepartmentStatus({ department }: DepartmentUpdateProps) {
       </DrawerTrigger>
       <DrawerContent className="max-h-[90vh] text-black dark:text-white">
         <DrawerHeader className="text-left">
-          <DrawerTitle>Change Status Department</DrawerTitle>
+          <DrawerTitle>Change Status Item User</DrawerTitle>
           <DrawerDescription>
             Are you sure! you cannot undo this action.
           </DrawerDescription>
         </DrawerHeader>
         <ScrollArea className="h-auto overflow-auto px-4">
-          <DepartmentUpdateForm
-            department={department}
+          <ItemUserStatusUpdateForm
+            itemUser={itemUser}
             onSubmit={handleUpdate}
           />
           <DrawerFooter className="p-0 mb-5 mt-2">
@@ -119,22 +120,19 @@ export function DepartmentStatus({ department }: DepartmentUpdateProps) {
   );
 }
 
-function DepartmentUpdateForm({
+function ItemUserStatusUpdateForm({
   className,
-  department,
+  itemUser,
   onSubmit,
-}: DepartmentProps) {
+}: ItemUserProps) {
   const [formData, setFormData] = React.useState({
-    departmentId: department?.departmentId,
-    name: department?.name,
-    status: department?.status,
+    itemUserId: itemUser?.itemUserId,
+    name: itemUser?.name,
+    status: itemUser?.status,
   });
 
   const formPayload = new FormData();
-  formPayload.append(
-    "departmentId",
-    formData.departmentId.toString() as string
-  );
+  formPayload.append("itemUserId", formData.itemUserId.toString() as string);
   formPayload.append("status", formData.status as string);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +141,7 @@ function DepartmentUpdateForm({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formPayload, true);
+    onSubmit(formPayload);
   };
 
   return (
@@ -152,7 +150,7 @@ function DepartmentUpdateForm({
       onSubmit={handleSubmit}
     >
       <div className="grid gap-2">
-        <Label htmlFor="name">Department Name</Label>
+        <Label htmlFor="name">Item User Name</Label>
         <Input
           type="text"
           disabled

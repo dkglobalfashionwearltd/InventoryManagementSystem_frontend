@@ -3,7 +3,6 @@ import {
   createAsyncThunk,
   type PayloadAction,
 } from "@reduxjs/toolkit";
-import axios from "axios";
 import { baseUrl } from "~/components/data";
 import { apiRequest } from "~/redux/data/GetData";
 

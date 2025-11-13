@@ -29,32 +29,28 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { useAppDispatch } from "~/redux/hook";
 import { Plus } from "lucide-react";
 import { createCategory } from "~/redux/features/Category/categorySlice";
-import { useToken } from "~/components/getToken";
-
-type category = {
-  name: string;
-  status: string;
-};
+import { getToken } from "~/components/getLocalStorage";
 
 type CateogryProps = {
   className?: string;
-  onSubmit: (formData: FormData, isClick: boolean) => void;
+  onSubmit: (formData: FormData) => void;
 };
 
 export function CategoryCreate() {
-  // const url = window.location.origin;
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const token = useToken();
+  const token = getToken();
 
   const dispatch = useAppDispatch();
-  const handleUpdate = async (formData: FormData, isClick: boolean) => {
-    dispatch(
-      createCategory({
-        token,
-        formPayload: formData,
-      })
-    );
+  const handleUpdate = async (formData: FormData) => {
+    if (token) {
+      dispatch(
+        createCategory({
+          token,
+          formPayload: formData,
+        })
+      );
+    }
   };
 
   if (isDesktop) {
@@ -131,7 +127,7 @@ function ProductCreateForm({ className, onSubmit }: CateogryProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formPayload, true);
+    onSubmit(formPayload);
   };
 
   return (

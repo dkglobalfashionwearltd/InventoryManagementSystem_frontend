@@ -8,16 +8,18 @@ import { getAllStock } from "~/redux/features/Stock/stockSlice";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
 import { StockCreate } from "./stock-create";
 import { toast } from "sonner";
+import { getToken } from "~/components/getLocalStorage";
 
 const Stock = () => {
   const dispatch = useAppDispatch();
+  const token = getToken();
   const [isAttempted, setIsAttempted] = useState<boolean>(true);
   const { loading, data, refresh } = useAppSelector((state) => state.stocks);
 
   useEffect(() => {
     fetchProducts();
     setIsAttempted(false);
-  }, [dispatch, refresh]);
+  }, [dispatch, token, refresh]);
 
   // toaster
   useEffect(() => {
@@ -31,7 +33,9 @@ const Stock = () => {
   }, [dispatch, refresh]);
 
   const fetchProducts = () => {
-    dispatch(getAllStock({ token: "" }));
+    if (token) {
+      dispatch(getAllStock({ token }));
+    }
   };
 
   return loading ? (

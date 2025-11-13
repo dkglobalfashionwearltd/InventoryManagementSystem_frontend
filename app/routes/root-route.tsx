@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useToken } from "~/components/getToken";
+import { getToken } from "~/components/getLocalStorage";
 import { LoadingTyping } from "~/components/loading-components/loading-typing";
 
 const RootRoute = () => {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const navigate = useNavigate();
-  const token = useToken();
+  const token = getToken();
 
   useEffect(() => {
     const timer = setTimeout(() => {

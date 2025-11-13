@@ -1,19 +1,17 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
-import { useUserRole, useToken, useUserId } from "~/components/getToken";
+import { getToken, getUserId, getUserRole } from "~/components/getLocalStorage";
 import { getUser } from "~/redux/features/auth/userSlice";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
 
 const User = () => {
   const dispatch = useAppDispatch();
-  const token = useToken() as string;
-  const navigate = useNavigate();
+  const token = getToken();
   const { loading, data } = useAppSelector((state) => state.user);
-  const userId = useUserId();
-  const userRole = useUserRole();
+  const userId = getUserId();
+  const userRole = getUserRole();
 
   useEffect(() => {
-    if (userId) {
+    if (userId && token) {
       dispatch(getUser({ userId, token }));
     }
   }, [userId]);

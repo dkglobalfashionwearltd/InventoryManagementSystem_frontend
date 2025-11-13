@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router";
 import DashboardComponent from "~/components/DashboardComponent";
-import { useToken } from "~/components/getToken";
+import { getToken } from "~/components/getLocalStorage";
 import { LoadingTyping } from "~/components/loading-components/loading-typing";
 
 const Dashboard = () => {
   const [checkingAuth, setCheckingAuth] = useState(true); // loader for initial auth check
-  const token = useToken();
+  const token = getToken();
   // ✅ Only run once on mount
   useEffect(() => {
     const timer = setTimeout(() => {

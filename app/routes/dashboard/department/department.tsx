@@ -1,27 +1,26 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { DataTable } from "~/components/custom-data-table/data-table";
 import { useAppDispatch, useAppSelector } from "~/redux/hook";
 import { DataTableSkeleton } from "~/components/datatableskeleton";
 import { Separator } from "~/components/ui/separator";
 import { DepartmentCreate } from "./department-create";
-import { useToken } from "~/components/getToken";
 import { toast } from "sonner";
 import { getAllDepartment } from "~/redux/features/Department/departmentSlice";
 import { columns } from "~/components/columns/department-columns";
+import { getToken } from "~/components/getLocalStorage";
 
 const Department = () => {
-  const token = useToken() as string;
+  const token = getToken();
   const dispatch = useAppDispatch();
   const [isAttempted, setIsAttempted] = useState<boolean>(true);
-  const { loading, data, error, refresh } = useAppSelector(
+  const { loading, data, refresh } = useAppSelector(
     (state) => state.departments
   );
 
   useEffect(() => {
     fetchProducts();
     setIsAttempted(false);
-  }, [refresh]);
+  }, [dispatch, refresh, token]);
 
   // toaster
   useEffect(() => {
@@ -34,8 +33,10 @@ const Department = () => {
     });
   }, [refresh]);
 
-  const fetchProducts = async () => {
-    await dispatch(getAllDepartment({ token }));
+  const fetchProducts = () => {
+    if (token) {
+      dispatch(getAllDepartment({ token }));
+    }
   };
 
   return loading ? (
